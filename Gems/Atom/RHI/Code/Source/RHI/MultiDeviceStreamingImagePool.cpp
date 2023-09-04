@@ -15,14 +15,6 @@
 
 namespace AZ::RHI
 {
-    MultiDeviceStreamingImageInitRequest::MultiDeviceStreamingImageInitRequest(
-        MultiDeviceImage& image, const ImageDescriptor& descriptor, AZStd::span<const StreamingImageMipSlice> tailMipSlices)
-        : m_mdImage{ &image }
-        , m_descriptor{ descriptor }
-        , m_tailMipSlices{ tailMipSlices }
-    {
-    }
-
     bool MultiDeviceStreamingImagePool::ValidateInitRequest(const MultiDeviceStreamingImageInitRequest& initRequest) const
     {
         if (Validation::IsEnabled())
@@ -60,7 +52,7 @@ namespace AZ::RHI
     {
         if (Validation::IsEnabled())
         {
-            if (!ValidateIsRegistered(expandRequest.m_mdImage))
+            if (!ValidateIsRegistered(expandRequest.m_image))
             {
                 return false;
             }
@@ -122,15 +114,15 @@ namespace AZ::RHI
         }
 
         ResultCode resultCode = MultiDeviceImagePoolBase::InitImage(
-            initRequest.m_mdImage,
+            initRequest.m_image,
             initRequest.m_descriptor,
             [this, &initRequest]()
             {
                 return IterateObjects<StreamingImagePool>([&initRequest](auto deviceIndex, auto deviceStreamingImagePool)
                 {
-                    initRequest.m_mdImage->m_deviceObjects[deviceIndex] = Factory::Get().CreateImage();
+                    initRequest.m_image->m_deviceObjects[deviceIndex] = Factory::Get().CreateImage();
                     StreamingImageInitRequest streamingImageInitRequest(
-                        *initRequest.m_mdImage->GetDeviceImage(deviceIndex), initRequest.m_descriptor, initRequest.m_tailMipSlices);
+                        *initRequest.m_image->GetDeviceImage(deviceIndex), initRequest.m_descriptor, initRequest.m_tailMipSlices);
                     return deviceStreamingImagePool->InitImage(streamingImageInitRequest);
                 });
             });
@@ -165,7 +157,7 @@ namespace AZ::RHI
         {
             StreamingImageExpandRequest expandRequest;
 
-            expandRequest.m_image = request.m_mdImage->GetDeviceImage(deviceIndex).get();
+            expandRequest.m_image = request.m_image->GetDeviceImage(deviceIndex).get();
             expandRequest.m_mipSlices = request.m_mipSlices;
             expandRequest.m_waitForUpload = request.m_waitForUpload;
             expandRequest.m_completeCallback = completeCallback;

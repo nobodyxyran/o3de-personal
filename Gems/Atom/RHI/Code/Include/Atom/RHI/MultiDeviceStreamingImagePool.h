@@ -20,45 +20,8 @@ namespace AZ
     {
         using CompleteCallback = AZStd::function<void()>;
 
-         //! A structure used as an argument to MultiDeviceStreamingImagePool::InitImage.
-        struct MultiDeviceStreamingImageInitRequest
-        {
-            MultiDeviceStreamingImageInitRequest() = default;
-
-            MultiDeviceStreamingImageInitRequest(
-                MultiDeviceImage& image, const ImageDescriptor& descriptor, AZStd::span<const StreamingImageMipSlice> tailMipSlices);
-
-            //! The image to initialize.
-            MultiDeviceImage* m_mdImage = nullptr;
-
-            //! The descriptor used to to initialize the image.
-            ImageDescriptor m_descriptor;
-
-             //! An array of tail mip slices to upload. This must not be empty or the call will fail.
-             //! This should only include the baseline set of mips necessary to render the image at
-             //! its lowest resolution. The uploads is performed synchronously.
-            AZStd::span<const StreamingImageMipSlice> m_tailMipSlices;
-        };
-
-         //! A structure used as an argument to MultiDeviceStreamingImagePool::ExpandImage.
-        struct MultiDeviceStreamingImageExpandRequest
-        {
-            MultiDeviceStreamingImageExpandRequest() = default;
-
-            //! The image with which to expand its mip chain.
-            MultiDeviceImage* m_mdImage = nullptr;
-
-            //! A list of image mip slices used to expand the contents. The data *must*
-            //! remain valid for the duration of the upload (until m_completeCallback
-            //! is triggered).
-            AZStd::span<const StreamingImageMipSlice> m_mipSlices;
-
-            //! Whether the function need to wait until the upload is finished.
-            bool m_waitForUpload = false;
-
-            //! A function to call when the upload is complete. It will be called instantly if m_waitForUpload was set to true.
-            CompleteCallback m_completeCallback;
-        };
+        using MultiDeviceStreamingImageInitRequest = StreamingImageInitRequestTemplate<MultiDeviceImage>;
+        using MultiDeviceStreamingImageExpandRequest = StreamingImageExpandRequestTemplate<MultiDeviceImage>;
 
         class MultiDeviceStreamingImagePool : public MultiDeviceImagePoolBase
         {

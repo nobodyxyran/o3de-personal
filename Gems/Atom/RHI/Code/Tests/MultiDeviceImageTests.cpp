@@ -78,7 +78,7 @@ namespace UnitTest
                 imageView = imageA->GetDeviceImage(deviceIndex)->GetImageView(RHI::ImageViewDescriptor(RHI::Format::R8G8B8A8_UINT));
                 AZ_TEST_ASSERT(imageView->IsStale() == false);
                 ASSERT_TRUE(imageView->IsInitialized());
-                ASSERT_TRUE(imageA->GetDeviceImage(deviceIndex)->use_count() == 2);
+                ASSERT_TRUE(imageA->GetDeviceImage(deviceIndex)->use_count() == 3);
             }
 
             ASSERT_TRUE(imageA->use_count() == 1);

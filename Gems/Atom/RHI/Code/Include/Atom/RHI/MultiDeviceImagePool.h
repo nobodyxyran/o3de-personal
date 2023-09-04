@@ -15,46 +15,8 @@
 
 namespace AZ::RHI
 {
-    //! @brief The data structure used to initialize an RHI::MultiDeviceImage on an RHI::MultiDeviceImagePool.
-    struct MultiDeviceImageInitRequest
-    {
-        MultiDeviceImageInitRequest() = default;
-
-        MultiDeviceImageInitRequest(
-            MultiDeviceImage& image, const ImageDescriptor& descriptor, const ClearValue* optimizedClearValue = nullptr);
-
-        //! The image to initialize.
-        MultiDeviceImage* m_image = nullptr;
-
-        //! The descriptor used to initialize the image.
-        ImageDescriptor m_descriptor;
-
-        //! An optional, optimized clear value for the image. Certain
-        //! platforms may use this value to perform fast clears when this
-        //! clear value is used.
-        const ClearValue* m_optimizedClearValue = nullptr;
-    };
-
-    //! @brief The data structure used to update contents of an RHI::MultiDeviceImage on an RHI::MultiDeviceImagePool.
-    struct MultiDeviceImageUpdateRequest
-    {
-        MultiDeviceImageUpdateRequest() = default;
-
-        //! A pointer to an initialized image, whose contents will be updated.
-        MultiDeviceImage* m_image = nullptr;
-
-        //! The image subresource to update.
-        ImageSubresource m_imageSubresource;
-
-        //! The offset in pixels from the start of the sub-resource in the destination image.
-        Origin m_imageSubresourcePixelOffset;
-
-        //! The source data pointer
-        const void* m_sourceData = nullptr;
-
-        //! The source sub-resource layout.
-        MultiDeviceImageSubresourceLayout m_sourceSubresourceLayout;
-    };
+    using MultiDeviceImageInitRequest = ImageInitRequestTemplate<MultiDeviceImage>;
+    using MultiDeviceImageUpdateRequest = ImageUpdateRequestTemplate<MultiDeviceImage, MultiDeviceImageSubresourceLayout>;
 
     //! MultiDeviceImagePool is a pool of images that will be bound as attachments to the frame scheduler.
     //! As a result, they are intended to be produced and consumed by the GPU. Persistent Color / Depth Stencil / Image

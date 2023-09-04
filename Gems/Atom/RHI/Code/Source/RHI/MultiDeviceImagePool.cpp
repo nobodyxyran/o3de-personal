@@ -12,14 +12,6 @@
 
 namespace AZ::RHI
 {
-    MultiDeviceImageInitRequest::MultiDeviceImageInitRequest(
-        MultiDeviceImage& image, const ImageDescriptor& descriptor, const ClearValue* optimizedClearValue)
-        : m_image{ &image }
-        , m_descriptor{ descriptor }
-        , m_optimizedClearValue{ optimizedClearValue }
-    {
-    }
-
     ResultCode MultiDeviceImagePool::Init(MultiDevice::DeviceMask deviceMask, const ImagePoolDescriptor& descriptor)
     {
         return MultiDeviceResourcePool::Init(

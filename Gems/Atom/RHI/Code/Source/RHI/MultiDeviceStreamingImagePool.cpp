@@ -90,7 +90,7 @@ namespace AZ::RHI
 
                 if (result != ResultCode::Success)
                 {
-                    // Reset already initialized device-specific StreamingImagePool and set deviceMask to 0
+                    // Reset already initialized device-specific SingleDeviceStreamingImagePool and set deviceMask to 0
                     m_deviceObjects.clear();
                     MultiDeviceObject::Init(static_cast<MultiDevice::DeviceMask>(0u));
                 }
@@ -118,10 +118,10 @@ namespace AZ::RHI
             initRequest.m_descriptor,
             [this, &initRequest]()
             {
-                return IterateObjects<StreamingImagePool>([&initRequest](auto deviceIndex, auto deviceStreamingImagePool)
+                return IterateObjects<SingleDeviceStreamingImagePool>([&initRequest](auto deviceIndex, auto deviceStreamingImagePool)
                 {
                     initRequest.m_image->m_deviceObjects[deviceIndex] = Factory::Get().CreateImage();
-                    StreamingImageInitRequest streamingImageInitRequest(
+                    SingleDeviceStreamingImageInitRequest streamingImageInitRequest(
                         *initRequest.m_image->GetDeviceImage(deviceIndex), initRequest.m_descriptor, initRequest.m_tailMipSlices);
                     return deviceStreamingImagePool->InitImage(streamingImageInitRequest);
                 });
@@ -153,9 +153,9 @@ namespace AZ::RHI
             }
         };
 
-        return IterateObjects<StreamingImagePool>([&request, &completeCallback](auto deviceIndex, auto deviceStreamingImagePool)
+        return IterateObjects<SingleDeviceStreamingImagePool>([&request, &completeCallback](auto deviceIndex, auto deviceStreamingImagePool)
         {
-            StreamingImageExpandRequest expandRequest;
+            SingleDeviceStreamingImageExpandRequest expandRequest;
 
             expandRequest.m_image = request.m_image->GetDeviceImage(deviceIndex).get();
             expandRequest.m_mipSlices = request.m_mipSlices;
@@ -178,7 +178,7 @@ namespace AZ::RHI
             return ResultCode::InvalidArgument;
         }
 
-        ResultCode resultCode = IterateObjects<StreamingImagePool>([&image, targetMipLevel](auto deviceIndex, auto deviceStreamingImagePool)
+        ResultCode resultCode = IterateObjects<SingleDeviceStreamingImagePool>([&image, targetMipLevel](auto deviceIndex, auto deviceStreamingImagePool)
         {
             return deviceStreamingImagePool->TrimImage(*image.GetDeviceImage(deviceIndex), targetMipLevel);
         });

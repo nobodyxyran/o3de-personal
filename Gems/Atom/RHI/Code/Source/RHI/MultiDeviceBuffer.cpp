@@ -40,7 +40,7 @@ namespace AZ::RHI
 
     void MultiDeviceBuffer::Shutdown()
     {
-        IterateObjects<Buffer>([]([[maybe_unused]] auto deviceIndex, auto deviceBuffer)
+        IterateObjects<SingleDeviceBuffer>([]([[maybe_unused]] auto deviceIndex, auto deviceBuffer)
         {
             deviceBuffer->Shutdown();
         });
@@ -50,7 +50,7 @@ namespace AZ::RHI
 
     void MultiDeviceBuffer::InvalidateViews()
     {
-        IterateObjects<Buffer>([]([[maybe_unused]] auto deviceIndex, auto deviceBuffer)
+        IterateObjects<SingleDeviceBuffer>([]([[maybe_unused]] auto deviceIndex, auto deviceBuffer)
         {
             deviceBuffer->InvalidateViews();
         });

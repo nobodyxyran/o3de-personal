@@ -192,7 +192,7 @@ namespace AZ
                 //! Creates and fill the dispatch item associated with the compute shader
                 bool BuildDispatchItem(RPI::Shader* computeShader, DispatchLevel dispatchLevel);
 
-                const RHI::DispatchItem* GetDispatchItem(RPI::Shader* computeShader);
+                const RHI::SingleDeviceDispatchItem* GetDispatchItem(RPI::Shader* computeShader);
 
                 void PrepareHairGenerationSrgDescriptors(uint32_t vertexCount, uint32_t numStrands);
 
@@ -380,8 +380,8 @@ namespace AZ
                 Data::Instance<RPI::ShaderResourceGroup> m_hairRenderSrg;   
  
                 //! Index buffer for the render pass via draw calls - naming was kept
-                Data::Instance<RHI::Buffer> m_indexBuffer;
-                RHI::IndexBufferView m_indexBufferView;
+                Data::Instance<RHI::SingleDeviceBuffer> m_indexBuffer;
+                RHI::SingleDeviceIndexBufferView m_indexBufferView;
                 //-------------------------------------------------------------------
 
                 AZStd::mutex m_mutex;

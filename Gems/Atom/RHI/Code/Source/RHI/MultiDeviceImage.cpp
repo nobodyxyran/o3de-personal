@@ -32,7 +32,7 @@ namespace AZ::RHI
         subresourceRange.m_arraySliceMax = 0;
         subresourceRange.m_aspectFlags = aspectFlags;
 
-        IterateObjects<Image>([&subresourceRange, &subresourceLayout](auto deviceIndex, auto deviceImage)
+        IterateObjects<SingleDeviceImage>([&subresourceRange, &subresourceLayout](auto deviceIndex, auto deviceImage)
         {
             deviceImage->GetSubresourceLayouts(subresourceRange, &subresourceLayout.GetDeviceImageSubresource(deviceIndex), nullptr);
         });
@@ -59,7 +59,7 @@ namespace AZ::RHI
 
     void MultiDeviceImage::Shutdown()
     {
-        IterateObjects<Image>([]([[maybe_unused]] auto deviceIndex, auto deviceImage)
+        IterateObjects<SingleDeviceImage>([]([[maybe_unused]] auto deviceIndex, auto deviceImage)
         {
             deviceImage->Shutdown();
         });
@@ -69,7 +69,7 @@ namespace AZ::RHI
 
     void MultiDeviceImage::InvalidateViews()
     {
-        IterateObjects<Image>([]([[maybe_unused]] auto deviceIndex, auto deviceImage)
+        IterateObjects<SingleDeviceImage>([]([[maybe_unused]] auto deviceIndex, auto deviceImage)
         {
             deviceImage->InvalidateViews();
         });

@@ -13,12 +13,12 @@
 
 namespace AZ::RHI
 {
-    IndirectBufferSignatureDescriptor MultiDeviceIndirectBufferSignatureDescriptor::GetDeviceIndirectBufferSignatureDescriptor(
+    SingleDeviceIndirectBufferSignatureDescriptor MultiDeviceIndirectBufferSignatureDescriptor::GetDeviceIndirectBufferSignatureDescriptor(
         int deviceIndex) const
     {
         AZ_Assert(m_pipelineState, "No MultiDevicePipelineState available\n");
 
-        IndirectBufferSignatureDescriptor descriptor{ m_layout };
+        SingleDeviceIndirectBufferSignatureDescriptor descriptor{ m_layout };
 
         if (m_pipelineState)
         {
@@ -58,7 +58,7 @@ namespace AZ::RHI
 
         uint32_t byteStride{ std::numeric_limits<uint32_t>::max() };
 
-        IterateObjects<IndirectBufferSignature>([&byteStride]([[maybe_unused]] auto deviceIndex, auto deviceSignature)
+        IterateObjects<SingleDeviceIndirectBufferSignature>([&byteStride]([[maybe_unused]] auto deviceIndex, auto deviceSignature)
         {
             auto deviceByteStride{ deviceSignature->GetByteStride() };
 
@@ -93,7 +93,7 @@ namespace AZ::RHI
 
         uint32_t offset{ std::numeric_limits<uint32_t>::max() };
 
-        IterateObjects<IndirectBufferSignature>([&offset, &index]([[maybe_unused]] auto deviceIndex, auto deviceSignature)
+        IterateObjects<SingleDeviceIndirectBufferSignature>([&offset, &index]([[maybe_unused]] auto deviceIndex, auto deviceSignature)
         {
             auto deviceOffset{ deviceSignature->GetOffset(index) };
 

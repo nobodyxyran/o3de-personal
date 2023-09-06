@@ -7,7 +7,7 @@
  */
 #pragma once
 
-#include <Atom/RHI/IndirectArguments.h>
+#include <Atom/RHI/SingleDeviceIndirectArguments.h>
 #include <Atom/RHI/MultiDeviceBuffer.h>
 #include <Atom/RHI/MultiDeviceIndirectBufferView.h>
 
@@ -39,13 +39,13 @@ namespace AZ::RHI
         {
         }
 
-        //! Returns the device-specific IndirectArguments for the given index
-        IndirectArguments GetDeviceIndirectArguments(int deviceIndex) const
+        //! Returns the device-specific SingleDeviceIndirectArguments for the given index
+        SingleDeviceIndirectArguments GetDeviceIndirectArguments(int deviceIndex) const
         {
             AZ_Assert(m_mdIndirectBufferView, "No MultiDeviceIndirectBufferView available\n");
             AZ_Assert(m_mdCountBuffer, "No MultiDeviceBuffer available\n");
 
-            return IndirectArguments{ m_maxSequenceCount,
+            return SingleDeviceIndirectArguments{ m_maxSequenceCount,
                                       m_mdIndirectBufferView->GetDeviceIndirectBufferView(deviceIndex),
                                       m_indirectBufferByteOffset,
                                       m_mdCountBuffer ? m_mdCountBuffer->GetDeviceBuffer(deviceIndex).get() : nullptr,

@@ -9,7 +9,7 @@
 
 #include <Atom/RHI.Reflect/SwapChainDescriptor.h>
 #include <Atom/RHI/MultiDeviceImagePoolBase.h>
-#include <Atom/RHI/SwapChain.h>
+#include <Atom/RHI/SingleDeviceSwapChain.h>
 #include <Atom/RHI/XRRenderingInterface.h>
 
 namespace AZ::RHI

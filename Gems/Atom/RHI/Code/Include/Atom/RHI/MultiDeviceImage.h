@@ -8,7 +8,7 @@
 #pragma once
 
 #include <Atom/RHI.Reflect/ImageSubresource.h>
-#include <Atom/RHI/Image.h>
+#include <Atom/RHI/SingleDeviceImage.h>
 #include <Atom/RHI/MultiDeviceResource.h>
 
 namespace AZ::RHI

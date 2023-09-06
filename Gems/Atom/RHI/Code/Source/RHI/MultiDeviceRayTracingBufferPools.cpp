@@ -67,7 +67,7 @@ namespace AZ::RHI
             deviceMask,
             [this]()
             {
-                IterateObjects<RayTracingBufferPools>([this](auto deviceIndex, auto devicePools)
+                IterateObjects<SingleDeviceRayTracingBufferPools>([this](auto deviceIndex, auto devicePools)
                 {
                     m_mdShaderTableBufferPool->m_deviceObjects[deviceIndex] = devicePools->GetShaderTableBufferPool().get();
                     m_mdShaderTableBufferPool->m_descriptor = devicePools->GetShaderTableBufferPool()->GetDescriptor();
@@ -80,7 +80,7 @@ namespace AZ::RHI
             deviceMask,
             [this]()
             {
-                IterateObjects<RayTracingBufferPools>([this](auto deviceIndex, auto devicePools)
+                IterateObjects<SingleDeviceRayTracingBufferPools>([this](auto deviceIndex, auto devicePools)
                 {
                     m_mdScratchBufferPool->m_deviceObjects[deviceIndex] = devicePools->GetScratchBufferPool().get();
                     m_mdScratchBufferPool->m_descriptor = devicePools->GetScratchBufferPool()->GetDescriptor();
@@ -93,7 +93,7 @@ namespace AZ::RHI
             deviceMask,
             [this]()
             {
-                IterateObjects<RayTracingBufferPools>([this](auto deviceIndex, auto devicePools)
+                IterateObjects<SingleDeviceRayTracingBufferPools>([this](auto deviceIndex, auto devicePools)
                 {
                     m_mdBlasBufferPool->m_deviceObjects[deviceIndex] = devicePools->GetBlasBufferPool().get();
                     m_mdBlasBufferPool->m_descriptor = devicePools->GetBlasBufferPool()->GetDescriptor();
@@ -106,7 +106,7 @@ namespace AZ::RHI
             deviceMask,
             [this]()
             {
-                IterateObjects<RayTracingBufferPools>([this](auto deviceIndex, auto devicePools)
+                IterateObjects<SingleDeviceRayTracingBufferPools>([this](auto deviceIndex, auto devicePools)
                 {
                     m_mdTlasInstancesBufferPool->m_deviceObjects[deviceIndex] = devicePools->GetTlasInstancesBufferPool().get();
                     m_mdTlasInstancesBufferPool->m_descriptor = devicePools->GetTlasInstancesBufferPool()->GetDescriptor();
@@ -119,7 +119,7 @@ namespace AZ::RHI
             deviceMask,
             [this]()
             {
-                IterateObjects<RayTracingBufferPools>([this](auto deviceIndex, auto devicePools)
+                IterateObjects<SingleDeviceRayTracingBufferPools>([this](auto deviceIndex, auto devicePools)
                 {
                     m_mdTlasBufferPool->m_deviceObjects[deviceIndex] = devicePools->GetTlasBufferPool().get();
                     m_mdTlasBufferPool->m_descriptor = devicePools->GetTlasBufferPool()->GetDescriptor();

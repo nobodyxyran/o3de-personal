@@ -10,7 +10,7 @@
 #include <Atom/RHI.Reflect/StreamingImagePoolDescriptor.h>
 #include <Atom/RHI/MultiDeviceImage.h>
 #include <Atom/RHI/MultiDeviceImagePoolBase.h>
-#include <Atom/RHI/StreamingImagePool.h>
+#include <Atom/RHI/SingleDeviceStreamingImagePool.h>
 
 #include <AzCore/std/containers/span.h>
 

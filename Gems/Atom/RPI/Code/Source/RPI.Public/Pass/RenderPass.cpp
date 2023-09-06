@@ -377,7 +377,7 @@ namespace AZ
         void RenderPass::CollectSrgs()
         {
             // Scene srg
-            const RHI::ShaderResourceGroup* sceneSrg = m_pipeline->GetScene()->GetRHIShaderResourceGroup();
+            const RHI::SingleDeviceShaderResourceGroup* sceneSrg = m_pipeline->GetScene()->GetRHIShaderResourceGroup();
             BindSrg(sceneSrg);
 
             // View srg
@@ -401,7 +401,7 @@ namespace AZ
             m_shaderResourceGroupsToBind.clear();
         }
 
-        void RenderPass::BindSrg(const RHI::ShaderResourceGroup* srg)
+        void RenderPass::BindSrg(const RHI::SingleDeviceShaderResourceGroup* srg)
         {
             if (srg)
             {

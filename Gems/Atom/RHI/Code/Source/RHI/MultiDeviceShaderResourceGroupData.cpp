@@ -35,7 +35,7 @@ namespace AZ::RHI
         {
             if ((AZStd::to_underlying(m_deviceMask) >> deviceIndex) & 1)
             {
-                m_deviceShaderResourceGroupDatas[deviceIndex] = ShaderResourceGroupData(layout);
+                m_deviceShaderResourceGroupDatas[deviceIndex] = SingleDeviceShaderResourceGroupData(layout);
             }
         }
     }

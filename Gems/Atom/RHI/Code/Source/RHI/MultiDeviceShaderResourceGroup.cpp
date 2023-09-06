@@ -15,7 +15,7 @@ namespace AZ::RHI
     void MultiDeviceShaderResourceGroup::Compile(
         const MultiDeviceShaderResourceGroupData& groupData, CompileMode compileMode /*= CompileMode::Async*/)
     {
-        IterateObjects<ShaderResourceGroup>([&groupData, compileMode](auto deviceIndex, auto deviceShaderResourceGroup)
+        IterateObjects<SingleDeviceShaderResourceGroup>([&groupData, compileMode](auto deviceIndex, auto deviceShaderResourceGroup)
         {
             deviceShaderResourceGroup->Compile(groupData.GetDeviceShaderResourceGroupData(deviceIndex), compileMode);
         });
@@ -28,7 +28,7 @@ namespace AZ::RHI
 
     bool MultiDeviceShaderResourceGroup::IsQueuedForCompile() const
     {
-        return IterateObjects<ShaderResourceGroup>([]([[maybe_unused]] auto deviceIndex, auto deviceShaderResourceGroup)
+        return IterateObjects<SingleDeviceShaderResourceGroup>([]([[maybe_unused]] auto deviceIndex, auto deviceShaderResourceGroup)
         {
             if (deviceShaderResourceGroup->IsQueuedForCompile())
             {
@@ -56,7 +56,7 @@ namespace AZ::RHI
 
     void MultiDeviceShaderResourceGroup::DisableCompilationForAllResourceTypes()
     {
-        IterateObjects<ShaderResourceGroup>([]([[maybe_unused]] auto deviceIndex, auto deviceShaderResourceGroup)
+        IterateObjects<SingleDeviceShaderResourceGroup>([]([[maybe_unused]] auto deviceIndex, auto deviceShaderResourceGroup)
         {
             deviceShaderResourceGroup->DisableCompilationForAllResourceTypes();
         });
@@ -64,7 +64,7 @@ namespace AZ::RHI
 
     bool MultiDeviceShaderResourceGroup::IsResourceTypeEnabledForCompilation(uint32_t resourceTypeMask) const
     {
-        return IterateObjects<ShaderResourceGroup>([resourceTypeMask]([[maybe_unused]] auto deviceIndex, auto deviceShaderResourceGroup)
+        return IterateObjects<SingleDeviceShaderResourceGroup>([resourceTypeMask]([[maybe_unused]] auto deviceIndex, auto deviceShaderResourceGroup)
         {
             if (deviceShaderResourceGroup->IsResourceTypeEnabledForCompilation(resourceTypeMask))
             {
@@ -77,7 +77,7 @@ namespace AZ::RHI
 
     bool MultiDeviceShaderResourceGroup::IsAnyResourceTypeUpdated() const
     {
-        return IterateObjects<ShaderResourceGroup>([]([[maybe_unused]] auto deviceIndex, auto deviceShaderResourceGroup)
+        return IterateObjects<SingleDeviceShaderResourceGroup>([]([[maybe_unused]] auto deviceIndex, auto deviceShaderResourceGroup)
         {
             if (deviceShaderResourceGroup->IsAnyResourceTypeUpdated())
             {
@@ -91,7 +91,7 @@ namespace AZ::RHI
     void MultiDeviceShaderResourceGroup::EnableRhiResourceTypeCompilation(
         const MultiDeviceShaderResourceGroupData::ResourceTypeMask resourceTypeMask)
     {
-        IterateObjects<ShaderResourceGroup>([resourceTypeMask]([[maybe_unused]] auto deviceIndex, auto deviceShaderResourceGroup)
+        IterateObjects<SingleDeviceShaderResourceGroup>([resourceTypeMask]([[maybe_unused]] auto deviceIndex, auto deviceShaderResourceGroup)
         {
             deviceShaderResourceGroup->EnableRhiResourceTypeCompilation(resourceTypeMask);
         });
@@ -99,7 +99,7 @@ namespace AZ::RHI
 
     void MultiDeviceShaderResourceGroup::ResetResourceTypeIteration(const MultiDeviceShaderResourceGroupData::ResourceType resourceType)
     {
-        IterateObjects<ShaderResourceGroup>([resourceType]([[maybe_unused]] auto deviceIndex, auto deviceShaderResourceGroup)
+        IterateObjects<SingleDeviceShaderResourceGroup>([resourceType]([[maybe_unused]] auto deviceIndex, auto deviceShaderResourceGroup)
         {
             deviceShaderResourceGroup->ResetResourceTypeIteration(resourceType);
         });
@@ -112,7 +112,7 @@ namespace AZ::RHI
 
     void MultiDeviceShaderResourceGroup::UpdateViewHash(const AZ::Name& viewName, const HashValue64 viewHash)
     {
-        IterateObjects<ShaderResourceGroup>([&viewName, viewHash]([[maybe_unused]] auto deviceIndex, auto deviceShaderResourceGroup)
+        IterateObjects<SingleDeviceShaderResourceGroup>([&viewName, viewHash]([[maybe_unused]] auto deviceIndex, auto deviceShaderResourceGroup)
         {
             deviceShaderResourceGroup->UpdateViewHash(viewName, viewHash);
         });
@@ -122,7 +122,7 @@ namespace AZ::RHI
 
     void MultiDeviceShaderResourceGroup::Shutdown()
     {
-        IterateObjects<ShaderResourceGroup>([]([[maybe_unused]] auto deviceIndex, auto deviceShaderResourceGroup)
+        IterateObjects<SingleDeviceShaderResourceGroup>([]([[maybe_unused]] auto deviceIndex, auto deviceShaderResourceGroup)
         {
             deviceShaderResourceGroup->Shutdown();
         });
@@ -132,7 +132,7 @@ namespace AZ::RHI
 
     void MultiDeviceShaderResourceGroup::InvalidateViews()
     {
-        IterateObjects<ShaderResourceGroup>([]([[maybe_unused]] auto deviceIndex, auto deviceShaderResourceGroup)
+        IterateObjects<SingleDeviceShaderResourceGroup>([]([[maybe_unused]] auto deviceIndex, auto deviceShaderResourceGroup)
         {
             deviceShaderResourceGroup->InvalidateViews();
         });

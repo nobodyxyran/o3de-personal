@@ -38,7 +38,7 @@ elif CURRENT_PLATFORM == 'darwin':
     # Test if Ninja is available from the command line to determine the generator and multi-config capability
     test_xcode_result = None
     try:
-        test_xcode_result = subprocess.run(['xcodebuild', '--version'])
+        test_xcode_result = subprocess.run(['xcodebuild', '-version'])
     except FileNotFoundError:
         pass
 

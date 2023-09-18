@@ -14,24 +14,24 @@ import o3de.export_project as exp
 from o3de.export_project import process_command
 import pathlib
 
-def export_ios_xcode_project(ctx: exp.O3DEScriptExportContext,
+def export_ios_Xcode_project(ctx: exp.O3DEScriptExportContext,
                              tools_build_folder: pathlib.Path,
                              ios_build_folder: pathlib.Path,
                              should_build_tools:bool = True,
-                             should_process_assets: bool = True,
+                             skip_asset_processing: bool = False,
                              logger: logging.Logger|None = None):
     """
     This function serves as an initial exporter for project to the iOS platform. The steps in this code will generate
-    an XCode project file containing all necessary build information to produce iOS executables. 
-    In order to build and deploy projects, it is recommended to open the project file in XCode to configure and build accordingly.
+    an Xcode project file containing all necessary build information to produce iOS executables. 
+    In order to build and deploy projects, it is recommended to open the project file in Xcode to configure and build accordingly.
 
-    Note: In order to use this functionality, you must be running this script from a MacOS machine with a valid copy of XCode
+    Note: In order to use this functionality, you must be running this script from a MacOS machine with a valid copy of Xcode
 
-    Instructions to handle iOS projects in XCode will be provided soon.
+    Instructions to handle iOS projects in Xcode will be provided soon.
 
     :param ctx:                                     The O3DE Script context provided by the export-command
     :param tools_build_folder:                      Optional build path to build the tools. (Will default to build/tools if not supplied)
-    :param ios_build_folder:                        The base output path of the generated XCode Project file for iOS
+    :param ios_build_folder:                        The base output path of the generated Xcode Project file for iOS
     :param should_build_tools:                      Option to build the export process dependent tools (AssetProcessor, AssetBundlerBatch, and dependencies)
     :param should_build_all_assets:                 Option to process all the assets for the game
     :param logger:                                  Optional logger to use to log the process and errors
@@ -49,23 +49,23 @@ def export_ios_xcode_project(ctx: exp.O3DEScriptExportContext,
     if should_build_tools:
         process_command(["cmake", "-B", tools_build_folder_str, '-G', "Xcode","-DLY_UNITY_BUILD=ON"], cwd=ctx.project_path)
 
-        process_command(f"cmake --build {tools_build_folder_str} --target Editor AssetProcessorBatch --config profile".split(),
+        process_command(["cmake", "--build", tools_build_folder_str, "--target", "Editor", "AssetProcessorBatch", "--config", "profile"],
                     cwd=ctx.project_path)
         
     # Optionally process the assets
-    if should_process_assets:
-        asset_processor_batch_path = tools_build_folder / 'bin/profile/AssetProcessorBatch'
+    if not skip_asset_processing:
+        asset_processor_batch_path = exp.get_asset_processor_batch_path(tools_build_folder, True)
         process_command([ str(asset_processor_batch_path), '--platforms=ios' ,
                         '--project-path', ctx.project_path ], cwd=ctx.project_path)
 
-    #generate the xcode project file for the O3DE project
+    # Generate the Xcode project file for the O3DE project
     cmake_toolchain_path = ctx.engine_path / 'cmake/Platform/iOS/Toolchain_ios.cmake'
 
     process_command(['cmake', '-B', ios_build_folder_str, '-G', "Xcode", f'-DCMAKE_TOOLCHAIN_FILE={str(cmake_toolchain_path)}', '-DLY_UNITY_BUILD=ON', '-DLY_MONOLITHIC_GAME=1'],
                     cwd= ctx.project_path)
 
-    if logger:
-        logger.info(f"XCode project file should be generated now. Please check {ios_build_folder_str}")
+
+    logger.info(f"Xcode project file should be generated now. Please check {ios_build_folder_str}")
 
 
 
@@ -90,10 +90,10 @@ if "o3de_context" in globals():
         parser.add_argument('-bt', '--build-tools', default=True, action='store_true',
                             help="Specifies whether to build O3DE toolchain executables. This will build AssetBundlerBatch, AssetProcessorBatch.")
         parser.add_argument('-tbp', '--tools-build-path', type=pathlib.Path, default=default_tools_path,
-                                help='Designates where the build files for the O3DE toolchain are generated. If not specified, default is <o3de_project_path>/build/tools.')
-        parser.add_argument('-ibp', '--ios-build-path', type=pathlib.Path, default=default_tools_path,
-                                help='Designates where the build files for the O3DE toolchain are generated. If not specified, default is <o3de_project_path>/build/tools.')
-        parser.add_argument('-assets', '--should-process-assets', default=True, action='store_true',
+                                help=f'Designates where the build files for the O3DE toolchain are generated. If not specified, default is {default_tools_path}.')
+        parser.add_argument('-ibp', '--ios-build-path', type=pathlib.Path, default=default_ios_path,
+                                help=f'Designates where the build files for the O3DE toolchain are generated. If not specified, default is {default_ios_path}.')
+        parser.add_argument('-assets', '--skip-asset-processing', default=False, action='store_true',
                                 help='Toggles processing all assets for the iOS build.')
         parser.add_argument('-q', '--quiet', action='store_true', help='Suppresses logging information unless an error occurs.')
         if o3de_context is None:
@@ -111,11 +111,11 @@ if "o3de_context" in globals():
     if args.quiet:
         o3de_logger.setLevel(logging.ERROR)
     try:
-        export_ios_xcode_project(ctx = o3de_context,
+        export_ios_Xcode_project(ctx = o3de_context,
                             tools_build_folder= args.tools_build_path,
                             ios_build_folder=args.ios_build_path,
                             should_build_tools = args.build_tools,
-                            should_process_assets = args.should_process_assets,
+                            skip_asset_processing = args.skip_asset_processing,
                             logger = o3de_logger)
     except exp.ExportProjectError as err:
         print(err)
